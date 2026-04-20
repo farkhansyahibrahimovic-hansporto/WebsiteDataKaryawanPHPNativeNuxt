@@ -1,144 +1,47 @@
-/proyek_pt_nt
-│
-├── config/
-│   └── database.php
-│
-├── public/
-│   ├── index.php
-│   ├── tambah.php
-│   ├── edit.php
-│   ├── hapus.php
-│   ├── detail.php
-│   ├── list.php
-│   └── upload/
-│       └── foto/
-│
-├── api/
-│   ├── karyawan/
-│   │   ├── get.php
-│   │   ├── create.php
-│   │   ├── update.php
-│   │   └── delete.php
-│   |── jabatan/
-│   |    └── get.php
-|   |--boostrap.php
-│
-├── functions/
-│   ├── karyawan.php
-│   ├── jabatan.php
-│   ├── response.php
-│   └── logger.php
-│
-├── logs/
-│   └── akses.log
-│
-└── README.md
+# Karyawan NT - Employee Management System
 
-// frontend/composables/useApi.ts
-export const useApi = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase
+Proyek ini merupakan aplikasi berbasis web untuk mengelola data karyawan secara terstruktur. Sistem ini dibangun menggunakan PHP Native sebagai backend dengan pendekatan REST API, serta didukung oleh dua jenis frontend, yaitu PHP Native dan Nuxt, yang digunakan untuk kebutuhan antarmuka yang berbeda.
 
-  interface ApiResponse<T = any> {
-    berhasil: boolean
-    pesan: string
-    data: T
-    kesalahan: any
-  }
+Aplikasi ini dirancang untuk membantu proses administrasi karyawan, seperti pengelolaan data, penyimpanan informasi, serta pengolahan data secara efisien. Backend berperan sebagai penyedia layanan API, sementara frontend menangani interaksi pengguna baik melalui tampilan server-side maupun client-side.
 
-  const handleRequest = async <T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> => {
-    try {
-      const response = await fetch(`${baseURL}${endpoint}`, {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-      })
+Penggunaan dua pendekatan frontend memberikan fleksibilitas dalam pengembangan, di mana PHP Native digunakan untuk kebutuhan dasar dan Nuxt untuk antarmuka yang lebih interaktif dan modern.
 
-      const data = await response.json()
-      return data
-    } catch (error) {
-      console.error('API Error:', error)
-      return {
-        berhasil: false,
-        pesan: 'Terjadi kesalahan koneksi',
-        data: null as any,
-        kesalahan: error,
-      }
-    }
-  }
+## Teknologi
 
-  // Karyawan API
-  const karyawan = {
-    getAll: (filters: Record<string, any> = {}) => {
-      const params = new URLSearchParams(filters).toString()
-      return handleRequest(`/../../api/karyawan/get.php${params ? `?${params}` : ''}`)
-    },
+* PHP Native sebagai backend
+* REST API sebagai komunikasi data
+* Nuxt.js sebagai frontend modern
+* PHP Native (view) sebagai frontend tambahan
+* MySQL atau PostgreSQL sebagai database
 
-    getById: (id: string) => {
-      return handleRequest(`/../../api/karyawan/get.php?id=${id}`)
-    },
+## Instalasi Singkat
 
-    create: async (data: FormData) => {
-      try {
-        const response = await fetch(`${baseURL}/../../api/karyawan/create.php`, {
-          method: 'POST',
-          body: data, // FormData untuk upload file
-        })
-        return await response.json()
-      } catch (error) {
-        return {
-          berhasil: false,
-          pesan: 'Gagal membuat karyawan',
-          data: null,
-          kesalahan: error,
-        }
-      }
-    },
+```bash
+git clone https://github.com/username/karyawan_nt.git
+cd karyawan_nt
+```
 
-    update: async (data: FormData) => {
-      try {
-        const response = await fetch(`${baseURL}/../../api/karyawan/update.php`, {
-          method: 'POST',
-          body: data,
-        })
-        return await response.json()
-      } catch (error) {
-        return {
-          berhasil: false,
-          pesan: 'Gagal mengupdate karyawan',
-          data: null,
-          kesalahan: error,
-        }
-      }
-    },
+### Backend & PHP Native Frontend
 
-    delete: (id: string) => {
-      return handleRequest(`/../../api/karyawan/delete.php`, {
-        method: 'DELETE',
-        body: JSON.stringify({ id_karyawan: id }),
-      })
-    },
-  }
+Konfigurasikan koneksi database pada file konfigurasi yang tersedia, kemudian jalankan menggunakan web server seperti Laragon, XAMPP, atau sejenisnya.
 
-  // Jabatan API
-  const jabatan = {
-    getAll: (filters: Record<string, any> = {}) => {
-      const params = new URLSearchParams(filters).toString()
-      return handleRequest(`/../../api/jabatan/get.php${params ? `?${params}` : ''}`)
-    },
+### Frontend Nuxt
 
-    getById: (id: number) => {
-      return handleRequest(`/../../api/jabatan/get.php?id=${id}`)
-    },
-  }
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-  return {
-    karyawan,
-    jabatan,
-  }
-}
+## Catatan
+
+Pastikan konfigurasi database telah disesuaikan sebelum menjalankan aplikasi. File konfigurasi yang bersifat sensitif tidak disertakan dalam repository. Disarankan menggunakan data dummy untuk keperluan pengujian.
+
+## Penulis
+
+Farkhansyah Ibrahimovic
+Email: [farkhansyahibrahimovic@gmail.com](mailto:farkhansyahibrahimovic@gmail.com)
+
+## Penutup
+
+Proyek ini dikembangkan sebagai bagian dari pembelajaran dalam membangun sistem pengelolaan data berbasis web, dengan fokus pada integrasi REST API serta penggunaan dua pendekatan frontend dalam satu sistem.
